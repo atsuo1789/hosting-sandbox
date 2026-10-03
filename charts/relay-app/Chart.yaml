@@ -1,0 +1,6 @@
+apiVersion: v2
+name: relay-app
+description: 中継AP向け標準チャート（検証用）
+type: application
+version: 0.1.0      # チャート自体のバージョン
+appVersion: "0.1.0" # アプリのバージョン

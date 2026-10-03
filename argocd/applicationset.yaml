@@ -1,0 +1,37 @@
+# gitops/apps/ 配下のディレクトリ1つ＝1環境 として自動でApplicationを生成する
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: relay-apps
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: https://github.com/atsuo1789/hosting-sandbox.git
+        revision: main
+        directories:
+          - path: gitops/apps/*
+  template:
+    metadata:
+      name: '{{.path.basename}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/atsuo1789/hosting-sandbox.git
+        targetRevision: main
+        path: charts/relay-app
+        helm:
+          releaseName: '{{.path.basename}}'
+          valueFiles:
+            - '../../gitops/apps/{{.path.basename}}/values.yaml'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{.path.basename}}'
+      syncPolicy:
+        automated:
+          prune: true     # Gitから消えたリソースは削除
+          selfHeal: true  # 手動変更はGitの状態に戻す
+        syncOptions:
+          - CreateNamespace=true

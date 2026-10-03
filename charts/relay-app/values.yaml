@@ -1,0 +1,23 @@
+# =========================================================
+# 利用者（案件側）が values で上書きしてよい項目
+# プローブ・ポート・ラベル等は templates 側で固定（＝FW標準）
+# =========================================================
+replicaCount: 1
+
+image:
+  repository: relay-app
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+
+relay:
+  envName: local
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    memory: 512Mi
+
+# 任意の追加環境変数（KEY: value）
+extraEnv: {}

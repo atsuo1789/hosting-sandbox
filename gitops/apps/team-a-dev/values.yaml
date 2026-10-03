@@ -1,0 +1,4 @@
+# 申し込み: team-a-dev（サンプル）
+replicaCount: 1
+relay:
+  envName: team-a-dev
